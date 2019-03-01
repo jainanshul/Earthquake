@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+# cd "$(dirname "$0")/.."
+ROOT=$PWD
+
+# Run python unit tests in ml directory
+(
+  python3 -m unittest discover -s "$ROOT/tests" -p '*_test.py' -v
+)
+
+exit 0
