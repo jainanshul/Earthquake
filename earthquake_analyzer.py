@@ -1,16 +1,19 @@
-#!/usr/bin/env python3
 """
 Class that provides methods to parse and analyze seismic data
 """
 
 import csv
 from dateutil import parser, tz
+import math
+
+from location_source import LocationSource
 
 class EarthquakeAnalyzer(object):
   """Class that provides methods to parse and analyze seismic data"""
   def __init__(self):
     super(EarthquakeAnalyzer, self).__init__()
     self.__histogram = {}
+    self.__locationSources = {}
 
   def parse(self, csv_file_path, *, timezone=None):
     """
@@ -30,6 +33,15 @@ class EarthquakeAnalyzer(object):
       for row in csv_reader:
         self.__calculate_histogram(row['time'], timezone=timezone)
 
+        # Report earthquake for the location source
+        location_source_name = row['locationSource']
+        location_source = self.__locationSources.get(
+            location_source_name,
+            LocationSource(name=location_source_name)
+        )
+        location_source.report_earthquake(row)
+        self.__locationSources[location_source_name] = location_source
+
   def get_histogram(self):
     """
     Return data points which represent the number of earthquakes in each
@@ -40,14 +52,34 @@ class EarthquakeAnalyzer(object):
 
     Returns:
         (dict): Dictionary with key as the date and the value as the number of
-                earthquake for that day
+                earthquakes for that day
 
     """
     return self.__histogram
 
+  def get_location_of_max_earthquakes(self):
+    """
+    Return which location source had the most earthquakes
+
+    Args:
+        None
+
+    Returns:
+        (str): Name of the location source
+
+    """
+    maxLocation = ''
+    maxEarthquake = -math.inf
+    for key, location_source in self.__locationSources.items():
+      if (location_source.num_earthquakes > maxEarthquake):
+        maxLocation = key
+        maxEarthquake = location_source.num_earthquakes
+
+    return maxLocation
+
   def __calculate_histogram(self, time, *, timezone=None):
     """
-    Calcuate data points which represent the number of earthquakes in each
+    Calculate data points which represent the number of earthquakes in each
     respective day.
 
     Args:
@@ -66,13 +98,11 @@ class EarthquakeAnalyzer(object):
 
     # If user passed in an invalid timezone then return
     if not tz_timezone:
-      print('{} is an invalid timezone'.format(timezone))
-      return
+      raise ValueError('{} is an invalid timezone'.format(timezone))
 
     # For some reason there is no time available for this seismic data
     if not time:
-      print('No time specified')
-      return
+      raise ValueError('No time specified')
 
     # Convert datestime string to datetime object
     utc_time = parser.parse(time)

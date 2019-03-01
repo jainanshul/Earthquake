@@ -38,6 +38,10 @@ def main():
   for key, value in histogram.items():
     print('{} : {}'.format(key, value))
 
+  print('')
+  print('Location source that had the most earthquakes: {}'.format(
+      earthquake_analyzer.get_location_of_max_earthquakes()
+  ))
   print('*********************************')
 
 if __name__ == '__main__':
