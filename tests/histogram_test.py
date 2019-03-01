@@ -1,3 +1,4 @@
+import csv
 import os
 import unittest
 
@@ -53,7 +54,11 @@ class TestHistogram(unittest.TestCase):
     }
 
     # Default timezone of UTC
-    earthquake_analyzer.parse(self.csv_file_path)
+    with open(self.csv_file_path, 'r') as csv_file:
+      csv_reader = csv.DictReader(csv_file)
+      for row in csv_reader:
+        earthquake_analyzer.report_earthquake(row)
+
     histogram = earthquake_analyzer.get_histogram()
     self.assertDictEqual(histogram, expected_histogram)
 
@@ -94,7 +99,11 @@ class TestHistogram(unittest.TestCase):
       '2019-01-29' : 82,
     }
 
-    earthquake_analyzer.parse(self.csv_file_path, timezone='PDT')
+    with open(self.csv_file_path, 'r') as csv_file:
+      csv_reader = csv.DictReader(csv_file)
+      for row in csv_reader:
+        earthquake_analyzer.report_earthquake(row, timezone='PDT')
+
     histogram = earthquake_analyzer.get_histogram()
     self.assertDictEqual(histogram, expected_histogram)
 

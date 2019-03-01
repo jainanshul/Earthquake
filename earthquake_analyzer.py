@@ -2,7 +2,6 @@
 Class that provides methods to parse and analyze seismic data
 """
 
-import csv
 from dateutil import parser, tz
 import math
 
@@ -15,32 +14,28 @@ class EarthquakeAnalyzer(object):
     self.__histogram = {}
     self.__locationSources = {}
 
-  def parse(self, csv_file_path, *, timezone=None):
+  def report_earthquake(self, seismic_data, *, timezone=None):
     """
-    Parse csv file and store the seismic data
+    Analyze reported seismic data
 
     Args:
-        csv_file_path (String): Path to the csv file to parse
+        seismic_data (dict): Dictionary containing seismic data
         timezone (String): Timezone used to generate the histogram
 
     Returns:
         None
 
     """
-    with open(csv_file_path, 'r') as csv_file:
-      csv_reader = csv.DictReader(csv_file)
+    self.__calculate_histogram(seismic_data['time'], timezone=timezone)
 
-      for row in csv_reader:
-        self.__calculate_histogram(row['time'], timezone=timezone)
-
-        # Report earthquake for the location source
-        location_source_name = row['locationSource']
-        location_source = self.__locationSources.get(
-            location_source_name,
-            LocationSource(name=location_source_name)
-        )
-        location_source.report_earthquake(row)
-        self.__locationSources[location_source_name] = location_source
+    # Report earthquake for a given location source
+    location_source_name = seismic_data['locationSource']
+    location_source = self.__locationSources.get(
+        location_source_name,
+        LocationSource(name=location_source_name)
+    )
+    location_source.report_earthquake(seismic_data)
+    self.__locationSources[location_source_name] = location_source
 
   def get_histogram(self):
     """

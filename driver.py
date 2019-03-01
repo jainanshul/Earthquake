@@ -4,8 +4,10 @@ Driver program to analyze given seismic data and print statistics
 """
 
 import argparse
+import csv
 
 from earthquake_analyzer import EarthquakeAnalyzer
+from csv_reader import get_csv_reader
 
 def main():
   """Main function of the script"""
@@ -27,10 +29,13 @@ def main():
   )
 
   args = args_parser.parse_args()
-
-  # Use an instance of earthquake analyzer to print stats
   earthquake_analyzer = EarthquakeAnalyzer()
-  earthquake_analyzer.parse(args.csv_file_path, timezone=args.timezone)
+
+  # Read all csv data one row at a time and report to EarthquakeAnalyzer
+  with open(args.csv_file_path, 'r') as csv_file:
+    csv_reader = csv.DictReader(csv_file)
+    for row in csv_reader:
+      earthquake_analyzer.report_earthquake(row, timezone=args.timezone)
 
   histogram = earthquake_analyzer.get_histogram()
   print('*********************************')
