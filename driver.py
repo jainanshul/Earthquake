@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
+"""
+Driver program to analyze given seismic data and print statistics
+"""
 
 import argparse
-import csv
 
-def parse_csv_file(csv_file_path):
-  with open(csv_file_path, 'r') as csv_file:
-    csv_reader = csv.DictReader(csv_file)
-
-    next(csv_reader) # Skip the first row that contains column names
-    for row in csv_reader:
-      print(row)
+from earthquake_analyzer import EarthquakeAnalyzer
 
 def main():
   """Main function of the script"""
@@ -32,7 +28,17 @@ def main():
 
   args = args_parser.parse_args()
 
-  parse_csv_file(args.csv_file_path)
+  # Use an instance of earthquake analyzer to print stats
+  earthquake_analyzer = EarthquakeAnalyzer()
+  earthquake_analyzer.parse(args.csv_file_path, timezone=args.timezone)
+
+  histogram = earthquake_analyzer.get_histogram()
+  print('*********************************')
+  print('Histogram data for last 30 days:')
+  for key, value in histogram.items():
+    print('{} : {}'.format(key, value))
+
+  print('*********************************')
 
 if __name__ == '__main__':
   main()
