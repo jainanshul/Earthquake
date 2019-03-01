@@ -38,7 +38,7 @@ def main():
 
   histogram = earthquake_analyzer.get_histogram()
   print('*********************************')
-  print('Histogram data for last 30 days:')
+  print('Number of earthquakes per day for last 30 days ({}):'.format(args.timezone))
   for key, value in histogram.items():
     print('{} : {}'.format(key, value))
 
@@ -49,7 +49,7 @@ def main():
 
   print('')
   magnitudes = earthquake_analyzer.get_average_earthquake_magnitudes()
-  print('Average earthquake magnitudes:')
+  print('Average earthquake magnitudes per location:')
   for key, value in magnitudes.items():
     print('{} : {}'.format(key, value))
   print('*********************************')
