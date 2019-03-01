@@ -26,9 +26,14 @@ class EarthquakeAnalyzer(object):
         None
 
     """
+    if 'time' not in seismic_data:
+      raise ValueError('time filed missing in seismic data')
     self.__calculate_histogram(seismic_data['time'], timezone=timezone)
 
     # Report earthquake for a given location source
+    if 'locationSource' not in seismic_data:
+      raise ValueError('locationSource filed missing in seismic data')
+
     location_source_name = seismic_data['locationSource']
     location_source = self.__locationSources.get(
         location_source_name,

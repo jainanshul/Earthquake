@@ -34,8 +34,8 @@ def main():
   # Read all csv data one row at a time and report to EarthquakeAnalyzer
   with open(args.csv_file_path, 'r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
-    for row in csv_reader:
-      earthquake_analyzer.report_earthquake(row, timezone=args.timezone)
+    for seismic_data in csv_reader:
+      earthquake_analyzer.report_earthquake(seismic_data, timezone=args.timezone)
 
   histogram = earthquake_analyzer.get_histogram()
   print('*********************************')
