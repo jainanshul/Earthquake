@@ -9,18 +9,18 @@ from location_source import LocationSource
 
 class EarthquakeAnalyzer(object):
   """Class that provides methods to parse and analyze seismic data"""
-  def __init__(self):
+  def __init__(self, *, timezone=None):
     super(EarthquakeAnalyzer, self).__init__()
     self.__histogram = {}
     self.__locationSources = {}
+    self.__timezone = timezone
 
-  def report_earthquake(self, seismic_data, *, timezone=None):
+  def report_earthquake(self, seismic_data):
     """
     Analyze reported seismic data
 
     Args:
         seismic_data (dict): Dictionary containing seismic data
-        timezone (String): Timezone used to generate the histogram
 
     Returns:
         None
@@ -28,7 +28,9 @@ class EarthquakeAnalyzer(object):
     """
     if 'time' not in seismic_data:
       raise ValueError('time filed missing in seismic data')
-    self.__calculate_histogram(seismic_data['time'], timezone=timezone)
+
+    # Track seismic activity per day
+    self.__count_activity_per_day(seismic_data['time'])
 
     # Report earthquake for a given location source
     if 'locationSource' not in seismic_data:
@@ -77,28 +79,26 @@ class EarthquakeAnalyzer(object):
 
     return maxLocation
 
-  def __calculate_histogram(self, time, *, timezone=None):
+  def __count_activity_per_day(self, time):
     """
-    Calculate data points which represent the number of earthquakes in each
-    respective day.
+    Keep track of the number of earthquakes in each respective day
 
     Args:
         time (String): Time for the earthquake represented in RFC 3339 format
-        timezone (String): Timezone used to generate the histogram
 
     Returns:
         None
 
     """
     # If not timezone specified then default to UTC
-    if not timezone:
+    if not self.__timezone:
       tz_timezone = tz.gettz('UTC')
     else:
-      tz_timezone = tz.gettz(timezone)
+      tz_timezone = tz.gettz(self.__timezone)
 
     # If user passed in an invalid timezone then return
     if not tz_timezone:
-      raise ValueError('{} is an invalid timezone'.format(timezone))
+      raise ValueError('{} is an invalid timezone'.format(self.__timezone))
 
     # For some reason there is no time available for this seismic data
     if not time:

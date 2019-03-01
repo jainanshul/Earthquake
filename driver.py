@@ -7,7 +7,6 @@ import argparse
 import csv
 
 from earthquake_analyzer import EarthquakeAnalyzer
-from csv_reader import get_csv_reader
 
 def main():
   """Main function of the script"""
@@ -29,13 +28,13 @@ def main():
   )
 
   args = args_parser.parse_args()
-  earthquake_analyzer = EarthquakeAnalyzer()
+  earthquake_analyzer = EarthquakeAnalyzer(timezone=args.timezone)
 
   # Read all csv data one row at a time and report to EarthquakeAnalyzer
   with open(args.csv_file_path, 'r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     for seismic_data in csv_reader:
-      earthquake_analyzer.report_earthquake(seismic_data, timezone=args.timezone)
+      earthquake_analyzer.report_earthquake(seismic_data)
 
   histogram = earthquake_analyzer.get_histogram()
   print('*********************************')

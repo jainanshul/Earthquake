@@ -64,7 +64,7 @@ class TestHistogram(unittest.TestCase):
 
   def test_histogram_pdt(self):
     """Test histogram in PDT timezone"""
-    earthquake_analyzer = EarthquakeAnalyzer()
+    earthquake_analyzer = EarthquakeAnalyzer(timezone='PDT')
     expected_histogram = {
       '2019-02-28' : 125,
       '2019-02-27' : 195,
@@ -102,7 +102,7 @@ class TestHistogram(unittest.TestCase):
     with open(self.csv_file_path, 'r') as csv_file:
       csv_reader = csv.DictReader(csv_file)
       for row in csv_reader:
-        earthquake_analyzer.report_earthquake(row, timezone='PDT')
+        earthquake_analyzer.report_earthquake(row)
 
     histogram = earthquake_analyzer.get_histogram()
     self.assertDictEqual(histogram, expected_histogram)
