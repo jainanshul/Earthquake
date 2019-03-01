@@ -43,9 +43,15 @@ def main():
     print('{} : {}'.format(key, value))
 
   print('')
-  print('Location source that had the most earthquakes: {}'.format(
+  print('Location that had the most earthquakes: {}'.format(
       earthquake_analyzer.get_location_of_max_earthquakes()
   ))
+
+  print('')
+  magnitudes = earthquake_analyzer.get_average_earthquake_magnitudes()
+  print('Average earthquake magnitudes:')
+  for key, value in magnitudes.items():
+    print('{} : {}'.format(key, value))
   print('*********************************')
 
 if __name__ == '__main__':

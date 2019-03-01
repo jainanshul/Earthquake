@@ -79,6 +79,23 @@ class EarthquakeAnalyzer(object):
 
     return maxLocation
 
+  def get_average_earthquake_magnitudes(self):
+    """
+    Return average earthquake magnitude for each location source
+
+    Args:
+        None
+
+    Returns:
+        (dict): Dictionary with key as the location name and the value as the
+                 average magnitude of earthquake at that location
+
+    """
+    return {
+        key:location_source.avg_magnitude
+        for key, location_source in self.__locationSources.items()
+    }
+
   def __count_activity_per_day(self, time):
     """
     Keep track of the number of earthquakes in each respective day
