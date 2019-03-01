@@ -2,7 +2,7 @@ import csv
 import os
 import unittest
 
-from earthquake_analyzer import EarthquakeAnalyzer
+from lib.earthquake_analyzer import EarthquakeAnalyzer
 
 class TestHistogram(unittest.TestCase):
   @classmethod

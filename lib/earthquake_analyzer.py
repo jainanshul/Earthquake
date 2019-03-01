@@ -5,7 +5,7 @@ Class that provides methods to parse and analyze seismic data
 from dateutil import parser, tz
 import math
 
-from location_source import LocationSource
+from lib.location_source import LocationSource
 
 class EarthquakeAnalyzer(object):
   """Class that provides methods to parse and analyze seismic data"""
@@ -107,21 +107,21 @@ class EarthquakeAnalyzer(object):
         None
 
     """
-    # If not timezone specified then default to UTC
+    # If no timezone specified then default to UTC
     if not self.__timezone:
       tz_timezone = tz.gettz('UTC')
     else:
       tz_timezone = tz.gettz(self.__timezone)
 
-    # If user passed in an invalid timezone then return
+    # Check if user passed in an invalid timezone
     if not tz_timezone:
       raise ValueError('{} is an invalid timezone'.format(self.__timezone))
 
-    # For some reason there is no time available for this seismic data
+    # Make sure there is time field available
     if not time:
       raise ValueError('No time specified')
 
-    # Convert datestime string to datetime object
+    # Convert datestime string to a datetime object
     utc_time = parser.parse(time)
 
     # Change the timezone to the user specified timezone

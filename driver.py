@@ -6,7 +6,7 @@ Driver program to analyze given seismic data and print statistics
 import argparse
 import csv
 
-from earthquake_analyzer import EarthquakeAnalyzer
+from lib.earthquake_analyzer import EarthquakeAnalyzer
 
 def main():
   """Main function of the script"""

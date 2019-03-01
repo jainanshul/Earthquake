@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from location_source import LocationSource
+from lib.location_source import LocationSource
 
 class TestLocationSource(unittest.TestCase):
   def test_earthquake_count(self):

@@ -1,7 +1,7 @@
 import unittest
 import datetime
 
-from earthquake_analyzer import EarthquakeAnalyzer
+from lib.earthquake_analyzer import EarthquakeAnalyzer
 
 class TestMaxEarthquakeLocation(unittest.TestCase):
 
